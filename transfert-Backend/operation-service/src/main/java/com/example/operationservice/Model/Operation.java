@@ -3,10 +3,12 @@ package com.example.operationservice.Model;
 import com.example.operationservice.Enum.OperationType;
 import com.example.operationservice.Enum.TransferType;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.sql.Date;
 
 @Entity
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,7 +20,7 @@ public class Operation {
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
 
-    private Date timestamp;
+    private Long timestamp;
 
 
 }

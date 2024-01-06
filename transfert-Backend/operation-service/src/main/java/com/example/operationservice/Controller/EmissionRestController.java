@@ -4,6 +4,7 @@ import com.example.operationservice.Model.Transfer;
 import com.example.operationservice.Repository.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,8 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/OPERATION-SERVICE")
-public class OperationRestController {
+public class EmissionRestController {
     @Autowired
     private TransferRepository transferRepository;
+
 
 }
