@@ -25,6 +25,9 @@ public class Transfer {
 
     private long timestamp;
 
+    private boolean confirmed;
+
+    private String otp;
     @OneToMany
     private List<Operation> operationList;
 

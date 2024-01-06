@@ -1,25 +1,26 @@
 package com.example.operationservice.Controller;
 
+import com.example.operationservice.Reponse.EmissionResponse;
 import com.example.operationservice.Enum.FraisType;
 import com.example.operationservice.Enum.OperationType;
 import com.example.operationservice.Enum.TransferStatus;
-import com.example.operationservice.Enum.TransferType;
 import com.example.operationservice.Model.Beneficiary;
 import com.example.operationservice.Model.Customer;
 import com.example.operationservice.Model.Operation;
 import com.example.operationservice.Model.Transfer;
+import com.example.operationservice.Reponse.OtpResponse;
 import com.example.operationservice.Repository.BeneficiaryRepository;
 import com.example.operationservice.Repository.CustomerRepository;
 import com.example.operationservice.Repository.OperationRepository;
 import com.example.operationservice.Repository.TransferRepository;
 import com.example.operationservice.Request.OperationBody;
+import com.example.operationservice.Request.OtpRequest;
 import com.example.operationservice.Request.TransferBody;
 import com.example.operationservice.Request.TransferRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.example.operationservice.Service.EmailSenderService;
+import com.example.operationservice.Service.RandomPasswordGenerator;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -29,12 +30,23 @@ public class EmissionRestController {
     TransferRepository transferRepository;
     CustomerRepository customerRepository;
     BeneficiaryRepository beneficiaryRepository;
-
+    RandomPasswordGenerator randomPasswordGenerator;
+    EmailSenderService senderService;
     OperationRepository operationRepository;
 
-    public EmissionRestController(TransferRepository transferRepository,CustomerRepository customerRepository,BeneficiaryRepository beneficiaryRepository,OperationRepository operationRepository){this.transferRepository=transferRepository;this.customerRepository=customerRepository;this.beneficiaryRepository=beneficiaryRepository;this.operationRepository=operationRepository;}
-    @PostMapping("/Emission")
-    public ResponseEntity<String>  emettreTransfer(@RequestBody TransferRequest transferRequest)
+    public EmissionRestController(TransferRepository transferRepository,CustomerRepository customerRepository
+            ,BeneficiaryRepository beneficiaryRepository,OperationRepository operationRepository,
+                                  EmailSenderService senderService, RandomPasswordGenerator randomPasswordGenerator)
+    {
+        this.transferRepository=transferRepository;
+        this.customerRepository=customerRepository;
+        this.beneficiaryRepository=beneficiaryRepository;
+        this.operationRepository=operationRepository;
+        this.senderService = senderService;
+        this.randomPasswordGenerator=randomPasswordGenerator;
+    }
+    @PostMapping("/emission")
+    public EmissionResponse emettreTransfer(@RequestBody TransferRequest transferRequest)
     {
 
         TransferBody transferBody = transferRequest.getTransferBody();
@@ -47,19 +59,19 @@ public class EmissionRestController {
         {
             if(transferBody.getAmount()>80000)
             {
-                return ResponseEntity.ok().body("Dépasse 80000");
+                return EmissionResponse.builder().msg("Dépassse le plafond de 80000").build();
             }
         }
         else{
             if(transferBody.getAmount()>2000)
             {
-                return  ResponseEntity.ok().body("Dépasse le plafond de 2000");
+                return  EmissionResponse.builder().msg("Dépasse le plafond de 2000").build();
 
             } else if (transferBody.getAmount()>customer.get().getBalance()) {
-                return  ResponseEntity.ok().body("Dépasse le solde de compte de paiement du client");
+                return  EmissionResponse.builder().msg("Dépasse le solde de compte de paiement du client").build();
 
             } else if (transferBody.getAmount()>customer.get().getPlafondAnnuel()) {
-                return ResponseEntity.ok().body("Dépasse le plafond annuel");
+                return EmissionResponse.builder().msg("Dépasse le plafond annuel").build();
 
             }
         }
@@ -67,6 +79,7 @@ public class EmissionRestController {
         double transferAmount= transferBody.getAmount();
         double deductAmount = transferBody.getAmount();
         double frais = 50.0;
+
         if(transferRequest.getFraisType()== FraisType.DONOR)
         {
             deductAmount=deductAmount+frais;
@@ -83,21 +96,26 @@ public class EmissionRestController {
         Random rnd = new Random();
         int n = 1000000 + rnd.nextInt(9000000);
         String transferReference = "EDP837"+n;
+        String otp = randomPasswordGenerator.generatePassayPassword();
 
         Transfer transfer = Transfer.builder()
                 .transferReference(transferReference)
                 .status(TransferStatus.A_SERVIR)
                 .amount(transferAmount)
-                        .sender(customer.get())
-                                .receiver(beneficiary.get()).build();
+                .sender(customer.get())
+                .receiver(beneficiary.get())
+                .otp(otp)
+                .confirmed(false)
+                .build();
 
         Operation operation = Operation.builder()
                 .operationType(operationBody.getOperationType())
-                .transferType(operationBody.getTransferType()).
-                transferReference(transfer).operationType(operationBody.getOperationType())
+                .transferType(operationBody.getTransferType())
+                .transferReference(transfer)
+                .operationType(operationBody.getOperationType())
                 .build();
 
-        Customer customer1 = Customer.builder().
+        Customer newCustomer = Customer.builder().
                 CustomerId(transferBody.getSenderId())
                 .FirstName(customer.get().getFirstName())
                 .LastName(customer.get().getLastName())
@@ -108,24 +126,51 @@ public class EmissionRestController {
                 .AccountType(customer.get().getAccountType())
                 .Email(customer.get().getEmail())
                 .build();
+        senderService.sendSimpleEmail(customer.get().getEmail(),"OTP verification",otp);
 
-        customerRepository.save(customer1);
+        customerRepository.save(newCustomer);
         transferRepository.save(transfer);
         operationRepository.save(operation);
 
-        return  ResponseEntity.ok().body("Transfert ajouté en attendant l'otp");
+        return  EmissionResponse.builder().transferRef(transfer.getTransferReference()).build();
 
     }
 
     @GetMapping("/create")
-    public void getcreate()
+    public void create()
     {
-        Customer c = Customer.builder().FirstName("Jonathan").LastName("Joestar").Email("jonathan@joestar.com").Balance(20000.0).Phone("0607080910").plafondAnnuel(20000.0).build();
+        Customer c = Customer.builder()
+                .FirstName("Jonathan")
+                .LastName("Joestar")
+                .Email("nizar.bouhsaine@gmail.com")
+                .Balance(20000.0)
+                .Phone("0607080910")
+                .plafondAnnuel(20000.0).build();
         customerRepository.save(c);
-//        operationRepository.deleteAll();
-//        transferRepository.deleteAll();
-//        beneficiaryRepository.deleteAll();
+
         Beneficiary b = Beneficiary.builder().firstName("Jane").lastName("Austen").email("Jane@austen.com").phone("0607098091").build();
         beneficiaryRepository.save(b);
+
     }
+
+    @PostMapping("/otp")
+    public OtpResponse verifyOtp(@RequestBody OtpRequest otpRequest)
+    {
+        Transfer transfer = transferRepository.getReferenceById(otpRequest.getTransferRef());
+        if(transfer.getOtp().matches(otpRequest.getOtp()))
+        {
+            transfer.setConfirmed(true);
+            transferRepository.save(transfer);
+            return OtpResponse.builder().msg("OTP verified successfully !").build();
+        }
+        else {
+            return OtpResponse.builder().msg("OTP not verified !").build();
+        }
+    }
+    @PostMapping("/cancel")
+    public void cancelTransfer()
+    {
+        
+    }
+
 }
