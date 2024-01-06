@@ -10,8 +10,9 @@ import lombok.*;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @Builder
 public class OperationBody {
 
-
-    private String transferType;
-    private String operationType;
+    @Enumerated(EnumType.STRING)
+    private TransferType transferType;
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
 
 }

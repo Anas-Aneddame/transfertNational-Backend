@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import lombok.*;
+import org.aspectj.lang.annotation.RequiredTypes;
 
 @Getter
 @Setter
@@ -17,9 +18,9 @@ import lombok.*;
 
 public class TransferBody {
 
-    private String senderId;
+    private Long senderId;
 
-    private String receiverId;
-    private String status;
+    private Long receiverId;
+
     private double amount;
 }

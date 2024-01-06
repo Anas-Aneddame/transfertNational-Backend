@@ -24,4 +24,5 @@ public class Customer {
     private String Phone;
     private Double Balance;
     private String AccountType;
+    private Double plafondAnnuel;
 }

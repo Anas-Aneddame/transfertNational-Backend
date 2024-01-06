@@ -19,7 +19,7 @@ public class Operation {
     private TransferType transferType;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
-
+    private Long agentId;
     private Long timestamp;
 
 
