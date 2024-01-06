@@ -4,12 +4,7 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/account-service/pom.xml" />
-        <option value="$PROJECT_DIR$/transfert-Backend/account-service/pom.xml" />
-        <option value="$PROJECT_DIR$/transfert-Backend/pom.xml" />
-        <option value="$PROJECT_DIR$/transfert-Backend/gateway-service/pom.xml" />
-        <option value="$PROJECT_DIR$/transfert-Backend/discovery-service/pom.xml" />
-        <option value="$PROJECT_DIR$/transfert-Backend/config-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/operation-service/pom.xml" />
       </list>
     </option>
   </component>
