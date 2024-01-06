@@ -1,69 +1,23 @@
 package com.example.accountservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.example.accountservice.Enum.OperationType;
+import com.example.accountservice.Enum.TransferType;
+import jakarta.persistence.*;
 
 import java.util.Date;
-
 @Entity
 public class Operation {
     @Id
-    @GeneratedValue
-    private Long OperationId;
-    private Long transferReference;
-    private Long executerId;
-    private String type;
-    private Date date;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @ManyToOne
+    private Transfer transferReference;
+    @Enumerated(EnumType.STRING)
+    private TransferType transferType;
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
 
-    public Long getOperationId() {
-        return OperationId;
-    }
+    private Date timestamp;
 
-    public void setOperationId(Long operationId) {
-        OperationId = operationId;
-    }
 
-    public Long getTransferReference() {
-        return transferReference;
-    }
-
-    public void setTransferReference(Long transferReference) {
-        this.transferReference = transferReference;
-    }
-
-    public Long getExecuterId() {
-        return executerId;
-    }
-
-    public void setExecuterId(Long executerId) {
-        this.executerId = executerId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Operation(Long operationId, Long transferReference, Long executerId, String type, Date date) {
-        OperationId = operationId;
-        this.transferReference = transferReference;
-        this.executerId = executerId;
-        this.type = type;
-        this.date = date;
-    }
-
-    public Operation() {
-    }
 }

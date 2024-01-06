@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TransferRepository extends JpaRepository<Transfer, Long> {
 
-    List<Transfer> findAllBySenderIdOrReceiverId(Long senderId, Long receiverId);
+   // List<Transfer> findAllBySenderId(Long senderId);
 }

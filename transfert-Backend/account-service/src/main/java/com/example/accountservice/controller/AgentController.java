@@ -17,13 +17,6 @@ public class AgentController {
     @Autowired
     private AgentRepository agentRepository;
 
-    /*@Autowired
-    private TransferRepository transferRepository;
-
-    @GetMapping("/agents/{agentId}/transfers")
-    public List<Transfer> getAllTransfersForAgent(@PathVariable Long agentId) {
-        return transferRepository.findAllBySenderIdOrReceiverId(agentId, agentId);
-    }*/
 
     @PostMapping("/agent")
     Agent newAgent(@RequestBody Agent newAgent) {
