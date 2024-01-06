@@ -40,7 +40,7 @@ public class AuthConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/auth/register", "/auth/token", "/auth/validate").permitAll()
+                                .requestMatchers("/auth/register", "/auth/authenticate", "/auth/validate").permitAll()
                                 .anyRequest().authenticated()
                 );
 
