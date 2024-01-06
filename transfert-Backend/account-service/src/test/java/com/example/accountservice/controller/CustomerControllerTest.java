@@ -51,7 +51,7 @@ class CustomerControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(newCustomer.getId()));
+                .andExpect(jsonPath("$.id").value(newCustomer.getCustomerId()));
     }
 
     // Tests pour getAllCustomers
@@ -75,7 +75,7 @@ class CustomerControllerTest {
     void testGetCustomerById() throws Exception {
         Long customerId = 1L;
         Customer customer = new Customer();
-        customer.setId(customerId);
+        customer.setCustomerId(customerId);
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
 
         mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
@@ -108,7 +108,7 @@ class CustomerControllerTest {
     void testUpdateCustomer() throws Exception {
         Long customerId = 1L;
         Customer updatedCustomer = new Customer();
-        updatedCustomer.setId(customerId);
+        updatedCustomer.setCustomerId(customerId);
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(new Customer()));
         when(customerRepository.save(any(Customer.class))).thenReturn(updatedCustomer);
 

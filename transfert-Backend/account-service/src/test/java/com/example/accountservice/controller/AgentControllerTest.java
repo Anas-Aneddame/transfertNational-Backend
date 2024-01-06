@@ -98,7 +98,7 @@ class AgentControllerTest {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(newAgent.getId()));
+                .andExpect(jsonPath("$.id").value(newAgent.getAgentId()));
     }
 
     // Tests pour updateAgent
@@ -106,7 +106,7 @@ class AgentControllerTest {
     void testUpdateAgent() throws Exception {
         Long agentId = 1L;
         Agent updatedAgent = new Agent();
-        updatedAgent.setId(agentId);
+        updatedAgent.setAgentId(agentId);
         when(agentRepository.findById(agentId)).thenReturn(Optional.of(new Agent()));
         when(agentRepository.save(any(Agent.class))).thenReturn(updatedAgent);
 
