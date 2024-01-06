@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor  @Builder
@@ -15,10 +16,8 @@ public class Transfer {
     @Transient
     private Customer sender;
 
-    private Long senderId;
     @Transient
     private Beneficiary receiver;
-    private Long receiverId;
     @Enumerated(EnumType.STRING)
     private TransferStatus status;
 
@@ -26,5 +25,7 @@ public class Transfer {
 
     private Date timestamp;
 
+    @OneToMany
+    private List<Operation> operationList;
 
 }
