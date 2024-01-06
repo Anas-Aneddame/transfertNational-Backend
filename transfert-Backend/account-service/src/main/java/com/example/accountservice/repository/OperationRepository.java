@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
-    List<Operation> findAllByTransferReference(Long transferReference);
+    //List<Operation> findAllByTransferReference(String transferReference);
+
 }

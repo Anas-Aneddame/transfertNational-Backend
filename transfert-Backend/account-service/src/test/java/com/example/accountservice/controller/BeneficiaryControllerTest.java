@@ -1,3 +1,4 @@
+import com.example.accountservice.controller.BeneficiaryController;
 import com.example.accountservice.exception.BeneficiaryNotFoundException;
 import com.example.accountservice.model.Beneficiary;
 import com.example.accountservice.repository.BeneficiaryRepository;
