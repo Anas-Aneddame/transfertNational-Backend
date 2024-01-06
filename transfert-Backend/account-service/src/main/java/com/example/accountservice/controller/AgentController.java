@@ -2,7 +2,9 @@ package com.example.accountservice.controller;
 
 import com.example.accountservice.exception.AgentNotFoundException;
 import com.example.accountservice.model.Agent;
+import com.example.accountservice.model.Transfer;
 import com.example.accountservice.repository.AgentRepository;
+import com.example.accountservice.repository.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,14 @@ public class AgentController {
 
     @Autowired
     private AgentRepository agentRepository;
+
+    /*@Autowired
+    private TransferRepository transferRepository;
+
+    @GetMapping("/agents/{agentId}/transfers")
+    public List<Transfer> getAllTransfersForAgent(@PathVariable Long agentId) {
+        return transferRepository.findAllBySenderIdOrReceiverId(agentId, agentId);
+    }*/
 
     @PostMapping("/agent")
     Agent newAgent(@RequestBody Agent newAgent) {

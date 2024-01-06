@@ -22,7 +22,7 @@ public class CustomerController {
     @Autowired
     private TransferRepository transferRepository;
 
-    @GetMapping("/{customerId}/transfers")
+    @GetMapping("/customers/{customerId}/transfers")
     public List<Transfer> getAllTransfersForCustomer(@PathVariable Long customerId) {
         return transferRepository.findAllBySenderIdOrReceiverId(customerId, customerId);
     }

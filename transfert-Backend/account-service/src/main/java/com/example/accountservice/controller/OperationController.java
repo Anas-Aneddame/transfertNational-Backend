@@ -14,33 +14,40 @@ public class OperationController {
     @Autowired
     private OperationRepository operationRepository;
 
-    @GetMapping("/{transferReference}")
+    @GetMapping("/operation/{transferReference}")
     public List<Operation> getOperationsForTransfer(@PathVariable Long transferReference) {
         return operationRepository.findAllByTransferReference(transferReference);
     }
 
-    @PostMapping("/")
+    @PostMapping("/createOperation")
     public Operation createOperation(@RequestBody Operation newOperation) {
         return operationRepository.save(newOperation);
     }
 
 
-    /*
     @PutMapping("/{operationId}")
     public Operation updateOperation(@RequestBody Operation updatedOperation, @PathVariable Long operationId) {
         return operationRepository.findById(operationId)
                 .map(existingOperation -> {
 
-                    existingOperation.setType(updatedOperation.getType());
-                    existingOperation.setDate(updatedOperation.getDate());
-
+                    if (updatedOperation.getTransferReference() != null) {
+                        existingOperation.setTransferReference(updatedOperation.getTransferReference());
+                    }
+                    if (updatedOperation.getDate() != null) {
+                        existingOperation.setDate(updatedOperation.getDate());
+                    }
+                    if (updatedOperation.getType() != null) {
+                        existingOperation.setType(updatedOperation.getType());
+                    }
+                    if (updatedOperation.getExecuterId()!= null) {
+                        existingOperation.setExecuterId(updatedOperation.getExecuterId());
+                    }
 
                     return operationRepository.save(existingOperation);
                 })
                 .orElseThrow(() -> new OperationNotFoundException(operationId));
     }
 
-     */
 
     @DeleteMapping("/{operationId}")
     public void deleteOperation(@PathVariable Long operationId) {
