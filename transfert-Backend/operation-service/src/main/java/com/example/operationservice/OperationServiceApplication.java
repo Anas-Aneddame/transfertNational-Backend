@@ -11,8 +11,6 @@ public class OperationServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OperationServiceApplication.class, args);
-
-
 	}
 
 }

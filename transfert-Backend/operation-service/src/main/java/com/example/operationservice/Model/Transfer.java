@@ -23,7 +23,7 @@ public class Transfer {
 
     private double amount;
 
-    private Date timestamp;
+    private long timestamp;
 
     @OneToMany
     private List<Operation> operationList;
