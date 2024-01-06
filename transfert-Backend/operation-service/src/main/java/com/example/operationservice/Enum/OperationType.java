@@ -6,5 +6,4 @@ public enum OperationType {
     APPLICATION_MOBILE,
     WALLET_CONSOLE_AGENT,
     ESPECE_GAB
-
 }
