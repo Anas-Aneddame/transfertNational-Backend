@@ -26,7 +26,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/token")
+    @PostMapping("/authenticate")
     public String getToken(@RequestBody AuthRequest authRequest){
         Authentication authenticate=  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(),authRequest.getPassword()));
         if(authenticate.isAuthenticated()){
@@ -43,9 +43,5 @@ public class AuthController {
          return "valid";
 
     }
-
-
-
-
 
 }
