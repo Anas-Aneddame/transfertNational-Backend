@@ -21,8 +21,9 @@ public class AuthService {
     public String saveUser(UserInfo userInfo){
         userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         userRepo.save(userInfo);
-        return "user added to the system";
+        return "success";
     }
+
 
 
     public String generateToken(String username){
