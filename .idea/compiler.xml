@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="account-service" target="17" />
+      <module name="config-service" target="17" />
+      <module name="discovery-service" target="17" />
+      <module name="gateway-service" target="17" />
+      <module name="operation-service" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
