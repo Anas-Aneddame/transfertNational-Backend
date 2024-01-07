@@ -29,7 +29,7 @@ public class GatewayServiceApplication {
 		return rlb
 				.routes()
 				.route(p -> p
-						.path("/AUTH-SERVICE/auth/*")
+						.path("/AUTH-SERVICE/auth/**")
 						.filters(f -> f.removeRequestHeader("Cookie")
 								.rewritePath("/AUTH-SERVICE/(?<segment>.*)", "/$\\{segment}")
 								.filter(authorizationHeaderFilter.apply(new
@@ -37,7 +37,7 @@ public class GatewayServiceApplication {
 						.uri("lb://AUTH-SERVICE")
 				)
 				.route(p -> p
-						.path("/ACCOUNT-SERVICE/*")
+						.path("/ACCOUNT-SERVICE/**")
 						.filters(f -> f.removeRequestHeader("Cookie")
 								.rewritePath("/ACCOUNT-SERVICE/(?<segment>.*)", "/$\\{segment}")
 								.filter(authorizationHeaderFilter.apply(new
@@ -45,7 +45,7 @@ public class GatewayServiceApplication {
 						.uri("lb://ACCOUNT-SERVICE")
 				)
 				.route(p -> p
-						.path("/OPERATION-SERVICE/*")
+						.path("/OPERATION-SERVICE/**")
 						.filters(f -> f.removeRequestHeader("Cookie")
 								.rewritePath("/OPERATION-SERVICE/(?<segment>.*)", "/$\\{segment}")
 								.filter(authorizationHeaderFilter.apply(new

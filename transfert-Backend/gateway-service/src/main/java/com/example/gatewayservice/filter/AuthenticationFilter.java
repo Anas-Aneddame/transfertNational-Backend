@@ -24,7 +24,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public GatewayFilter apply(Config config) {
         System.out.println("gateway filter");
         return ((exchange, chain) -> {
-            System.out.println("validator");
+            System.out.println("validate");
 
             if (validator.isSecured.test(exchange.getRequest())) {
                 //header contains token or not

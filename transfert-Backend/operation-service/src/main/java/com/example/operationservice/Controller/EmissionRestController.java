@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/OPERATION-SERVICE")
+@RequestMapping("/operation")
 public class EmissionRestController {
     TransferRepository transferRepository;
     CustomerRepository customerRepository;
@@ -32,7 +32,7 @@ public class EmissionRestController {
     OperationRepository operationRepository;
 
     public EmissionRestController(TransferRepository transferRepository,CustomerRepository customerRepository,BeneficiaryRepository beneficiaryRepository,OperationRepository operationRepository){this.transferRepository=transferRepository;this.customerRepository=customerRepository;this.beneficiaryRepository=beneficiaryRepository;this.operationRepository=operationRepository;}
-    @PostMapping("/Emission")
+    @PostMapping("/emission")
     public ResponseEntity<String>  emettreTransfer(@RequestBody TransferRequest transferRequest)
     {
 
