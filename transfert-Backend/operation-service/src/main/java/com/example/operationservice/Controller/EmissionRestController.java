@@ -97,7 +97,7 @@ public class EmissionRestController {
         int n = 1000000 + rnd.nextInt(9000000);
         String transferReference = "EDP837"+n;
         String otp = randomPasswordGenerator.generatePassayPassword();
-
+        System.out.println(otp);
         Transfer transfer = Transfer.builder()
                 .transferReference(transferReference)
                 .status(TransferStatus.A_SERVIR)
@@ -153,7 +153,7 @@ public class EmissionRestController {
 
     }
 
-    @PostMapping("/otp")
+    @PostMapping("/emissionotp")
     public OtpResponse verifyOtp(@RequestBody OtpRequest otpRequest)
     {
         Transfer transfer = transferRepository.getReferenceById(otpRequest.getTransferRef());
@@ -170,7 +170,7 @@ public class EmissionRestController {
     @PostMapping("/cancel")
     public void cancelTransfer()
     {
-        
+
     }
 
 }
