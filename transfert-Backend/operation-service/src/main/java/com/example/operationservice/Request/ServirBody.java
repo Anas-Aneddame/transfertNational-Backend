@@ -12,4 +12,5 @@ public class ServirBody {
     String transferReference;
     Long agentId;
     Long beneficiaryId;
+    String codepin;
 }

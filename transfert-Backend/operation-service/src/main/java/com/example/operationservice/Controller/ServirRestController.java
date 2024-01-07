@@ -12,17 +12,15 @@ import com.example.operationservice.Repository.BeneficiaryRepository;
 import com.example.operationservice.Repository.CustomerRepository;
 import com.example.operationservice.Repository.OperationRepository;
 import com.example.operationservice.Repository.TransferRepository;
-import com.example.operationservice.Request.OtpRequest;
 import com.example.operationservice.Request.ServirBody;
 import com.example.operationservice.Request.ServirOtpRequest;
 import com.example.operationservice.Service.EmailSenderService;
 import com.example.operationservice.Service.RandomPasswordGenerator;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/servir")
-public class ServirController {
+public class ServirRestController {
     private TransferRepository transferRepository;
     private CustomerRepository customerRepository;
     private BeneficiaryRepository beneficiaryRepository;
@@ -30,7 +28,7 @@ public class ServirController {
     private EmailSenderService emailSenderService;
     private RandomPasswordGenerator randomPasswordGenerator;
 
-    public ServirController(TransferRepository transferRepository, CustomerRepository customerRepository, BeneficiaryRepository beneficiaryRepository, OperationRepository operationRepository, EmailSenderService emailSenderService, RandomPasswordGenerator randomPasswordGenerator){
+    public ServirRestController(TransferRepository transferRepository, CustomerRepository customerRepository, BeneficiaryRepository beneficiaryRepository, OperationRepository operationRepository, EmailSenderService emailSenderService, RandomPasswordGenerator randomPasswordGenerator){
         this.transferRepository=transferRepository;
         this.customerRepository=customerRepository;
         this.operationRepository=operationRepository;
@@ -66,6 +64,7 @@ public class ServirController {
                 .receiver(beneficiary)
                 .status(TransferStatus.A_SERVIR)
                 .confirmed(true)
+                .codepin("99999")
                 .build();
         transferRepository.save(transfer);
     }
@@ -82,6 +81,9 @@ public class ServirController {
         }
         if(transfer == null){
             return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+        }
+        if(!transfer.isConfirmed()){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
         }
         if(transfer.getStatus()== TransferStatus.SERVIE) {
             return new ServirResponse().builder().msg("Message Bloquant , transfer deja paye").build();
@@ -107,6 +109,9 @@ public class ServirController {
 
         if(transfer == null){
             return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+        }
+        if(!transfer.isConfirmed()){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
         }
         if(!transfer.getOtp().equals(servirOtpRequest.getOtp())){
             return new ServirResponse().builder().msg("Wrong OTP").build();
@@ -149,6 +154,9 @@ public class ServirController {
         if(transfer == null){
             return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
         }
+        if(!transfer.isConfirmed()){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
+        }
         if(transfer.getStatus()== TransferStatus.SERVIE) {
             return new ServirResponse().builder().msg("Message Bloquant , transfer deja paye").build();
         }
@@ -175,7 +183,10 @@ public class ServirController {
         if(transfer == null){
             return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
         }
-        if(servirOtpRequest.getOtp() == null && !transfer.getOtp().equals(servirOtpRequest.getOtp())){
+        if(!transfer.isConfirmed()){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
+        }
+        if(servirOtpRequest.getOtp() == null || !transfer.getOtp().equals(servirOtpRequest.getOtp())){
             return new ServirResponse().builder().msg("Wrong OTP").build();
         }
         if(wallet ==null){
@@ -206,10 +217,46 @@ public class ServirController {
         return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
     }
 
-    @GetMapping("/")
-    public ResponseEntity<String> servieEspeceGAB(){
-        System.out.println("someting");
-        return ResponseEntity.ok("wow");
-        //transfer dans l'etat 'a servir' ou etat 'deploque a servir' + j meme jour de debloquage
+    @PostMapping("/GAB")
+    public ServirResponse servieEspeceGAB(@RequestBody ServirBody servirBody){
+        Long agentId=servirBody.getAgentId();
+
+        Beneficiary beneficiary=beneficiaryRepository.findById(servirBody.getBeneficiaryId()).orElse(null);
+        String transferReference=servirBody.getTransferReference();
+        Transfer transfer=transferRepository.findById(transferReference).orElse(null);
+        if(beneficiary == null){
+            return new ServirResponse().builder().msg("Message Bloquant, Beneficairy n'existe pas").build();
+        }
+        if(transfer == null){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+        }
+        if(!transfer.isConfirmed()){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
+        }
+        if(transfer.getStatus()== TransferStatus.SERVIE) {
+            return new ServirResponse().builder().msg("Message Bloquant , transfer deja paye").build();
+        }
+        if(transfer.getStatus() != TransferStatus.A_SERVIR){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer pas dans l'etat a_servir").build();
+        }
+        if(servirBody.getCodepin()==null || !servirBody.getCodepin().equals(transfer.getCodepin())){
+            return new ServirResponse().builder().msg("Wrong Code").build();
+        }
+
+        //Add emission operation
+        Operation operation=Operation.builder()
+                .operationType(OperationType.ESPECE_GAB)
+                .transferType(TransferType.EMISSION)
+                .agentId(agentId)
+                .timestamp(System.currentTimeMillis())
+                .transferReference(transfer)
+                .build();
+        operationRepository.save(operation);
+
+        //update transfer status
+        transfer.setStatus(TransferStatus.SERVIE);
+        transferRepository.save(transfer);
+
+        return new ServirResponse().builder().msg("Confirmer reception d'argent , Edition du recu").build();
     }
 }
