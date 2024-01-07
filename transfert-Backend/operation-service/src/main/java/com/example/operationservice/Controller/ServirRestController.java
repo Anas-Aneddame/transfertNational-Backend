@@ -18,6 +18,9 @@ import com.example.operationservice.Service.EmailSenderService;
 import com.example.operationservice.Service.RandomPasswordGenerator;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/servir")
 public class ServirRestController {
@@ -65,8 +68,17 @@ public class ServirRestController {
                 .status(TransferStatus.A_SERVIR)
                 .confirmed(true)
                 .codepin("99999")
+                .timestamp(System.currentTimeMillis())
                 .build();
         transferRepository.save(transfer);
+        Operation operation=new Operation().builder()
+                .agentId(86L)
+                .transferReference(transfer)
+                .operationType(OperationType.ESPECE_CONSOLE_AGENT)
+                .transferType(TransferType.EMISSION)
+                .timestamp(System.currentTimeMillis())
+                .build();
+        operationRepository.save(operation);
     }
 
     @PostMapping("/espece-console")
@@ -178,7 +190,6 @@ public class ServirRestController {
 
         String transferReference=servirOtpRequest.getTransferRef();
         Transfer transfer=transferRepository.findById(transferReference).orElse(null);
-        Customer wallet=customerRepository.findByEmail(transfer.getReceiver().getEmail());
 
         if(transfer == null){
             return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
@@ -189,6 +200,8 @@ public class ServirRestController {
         if(servirOtpRequest.getOtp() == null || !transfer.getOtp().equals(servirOtpRequest.getOtp())){
             return new ServirResponse().builder().msg("Wrong OTP").build();
         }
+
+        Customer wallet=customerRepository.findByEmail(transfer.getReceiver().getEmail());
         if(wallet ==null){
             return new ServirResponse().builder().msg("Message Bloquant , wallet n'existe pas").build();
         }
@@ -222,6 +235,7 @@ public class ServirRestController {
         Long agentId=servirBody.getAgentId();
 
         Beneficiary beneficiary=beneficiaryRepository.findById(servirBody.getBeneficiaryId()).orElse(null);
+
         String transferReference=servirBody.getTransferReference();
         Transfer transfer=transferRepository.findById(transferReference).orElse(null);
         if(beneficiary == null){
