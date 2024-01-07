@@ -7,99 +7,209 @@ import com.example.operationservice.Model.Beneficiary;
 import com.example.operationservice.Model.Customer;
 import com.example.operationservice.Model.Operation;
 import com.example.operationservice.Model.Transfer;
+import com.example.operationservice.Reponse.ServirResponse;
+import com.example.operationservice.Repository.BeneficiaryRepository;
 import com.example.operationservice.Repository.CustomerRepository;
 import com.example.operationservice.Repository.OperationRepository;
 import com.example.operationservice.Repository.TransferRepository;
+import com.example.operationservice.Request.OtpRequest;
+import com.example.operationservice.Request.ServirBody;
+import com.example.operationservice.Request.ServirOtpRequest;
 import com.example.operationservice.Service.EmailSenderService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.operationservice.Service.RandomPasswordGenerator;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/servie")
+@RequestMapping("/servir")
 public class ServirController {
     private TransferRepository transferRepository;
     private CustomerRepository customerRepository;
+    private BeneficiaryRepository beneficiaryRepository;
     private OperationRepository operationRepository;
     private EmailSenderService emailSenderService;
+    private RandomPasswordGenerator randomPasswordGenerator;
 
-    public ServirController(TransferRepository transferRepository,CustomerRepository customerRepository,OperationRepository operationRepository,EmailSenderService emailSenderService){
+    public ServirController(TransferRepository transferRepository, CustomerRepository customerRepository, BeneficiaryRepository beneficiaryRepository, OperationRepository operationRepository, EmailSenderService emailSenderService, RandomPasswordGenerator randomPasswordGenerator){
         this.transferRepository=transferRepository;
         this.customerRepository=customerRepository;
         this.operationRepository=operationRepository;
         this.emailSenderService=emailSenderService;
+        this.beneficiaryRepository=beneficiaryRepository;
+        this.randomPasswordGenerator=randomPasswordGenerator;
+
     }
 
+    @GetMapping("/data")
+    public void addData(){
+        Customer customer=new Customer().builder()
+                .CNE("J556222")
+                .Email("hamdanimee@gmail.com")
+                .Phone("0676158831")
+                .Balance(20000D)
+                .plafondAnnuel(20000D)
+                .FirstName("Mohamed")
+                .LastName("Hamdani")
+                .build();
+        customerRepository.save(customer);
+        Beneficiary beneficiary=new Beneficiary().builder()
+                .phone("07777777")
+                .firstName("Brahim")
+                .lastName("briming")
+                .email("hamdanimee@gmail.com")
+                .build();
+        beneficiaryRepository.save(beneficiary);
+        Transfer transfer=new Transfer().builder()
+                .transferReference("001")
+                .amount(2000D)
+                .sender(customer)
+                .receiver(beneficiary)
+                .status(TransferStatus.A_SERVIR)
+                .confirmed(true)
+                .build();
+        transferRepository.save(transfer);
+    }
 
-    public void servieEspeceConsoleAgent(String transferReference,Long agentId){
+    @PostMapping("/espece-console")
+    public ServirResponse servieEspeceConsoleAgent(@RequestBody ServirBody servirBody){
+        Beneficiary beneficiary=beneficiaryRepository.findById(servirBody.getBeneficiaryId()).orElse(null);
+
+        String transferReference=servirBody.getTransferReference();
         Transfer transfer=transferRepository.findById(transferReference).orElse(null);
-//        Customer customer=new Customer();
-//        Beneficiary beneficiary=new Beneficiary();
 
+        if(beneficiary == null){
+            return new ServirResponse().builder().msg("Message Bloquant, Beneficairy n'existe pas").build();
+        }
         if(transfer == null){
-            System.out.println("Message Bloquant , transfer n'existe pas");
-//            return ;
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
         }
         if(transfer.getStatus()== TransferStatus.SERVIE) {
-            System.out.println("Message Bloquant , transfer deja paye");
-//            return;
+            return new ServirResponse().builder().msg("Message Bloquant , transfer deja paye").build();
         }
         if(transfer.getStatus() != TransferStatus.A_SERVIR){
-            System.out.println("Message Bloquant , transfer pas dans l'etat a_servir");
-//            return ;
+            return new ServirResponse().builder().msg("Message Bloquant , transfer pas dans l'etat a_servir").build();
         }
         //client blacklist dans sirone
 
-//        customer=transfer.getSender();
-//        beneficiary=transfer.getReceiver();
+        String otp=randomPasswordGenerator.generatePassayPassword();
+        transfer.setOtp(otp);
+        transferRepository.save(transfer);
+        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
 
-        emailSenderService.sendSimpleEmail("hamdanimee@gmail.com","OTP","Code : 98k34jl");
-
-        //Add emission operation
-//        Operation operation=Operation.builder()
-//                .operationType(OperationType.ESPECE_CONSOLE_AGENT)
-//                .transferType(TransferType.EMISSION)
-//                .agentId(agentId)
-//                .timestamp(System.currentTimeMillis())
-//                .transferReference(transfer)
-//                .build();
-//        operationRepository.save(operation);
-//        //update transfer status
-//        transfer.setStatus(TransferStatus.SERVIE);
-//        transferRepository.save(transfer);
-
-        System.out.println("Confirmer reception d'argent , edition du recu");
-
+        return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
     }
-    public void servieWalletConsoleAgent(String transferReference,Long agentId){
+    @PostMapping("/espece-console/verify-otp")
+    public ServirResponse servirEspeceConsoleAgentVerifyOtp(@RequestBody ServirOtpRequest servirOtpRequest){
+        Long agentId= servirOtpRequest.getAgentId();
+
+        String transferReference=servirOtpRequest.getTransferRef();
         Transfer transfer=transferRepository.findById(transferReference).orElse(null);
-//        Customer customer=new Customer();
-//        Beneficiary beneficiary=new Beneficiary();
 
         if(transfer == null){
-            System.out.println("Message Bloquant , transfer n'existe pas");
-            return ;
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
         }
-        if(transfer.getStatus()== TransferStatus.SERVIE){
-            System.out.println("Message Bloquant , transfer deja paye");
-            return ;
+        if(!transfer.getOtp().equals(servirOtpRequest.getOtp())){
+            return new ServirResponse().builder().msg("Wrong OTP").build();
+        }
+
+        //wipe transfer otp
+        transfer.setOtp(null);
+
+        //Add emission operation
+        Operation operation=Operation.builder()
+                .operationType(OperationType.ESPECE_CONSOLE_AGENT)
+                .transferType(TransferType.EMISSION)
+                .agentId(agentId)
+                .timestamp(System.currentTimeMillis())
+                .transferReference(transfer)
+                .build();
+        operationRepository.save(operation);
+
+        //update transfer status
+        transfer.setStatus(TransferStatus.SERVIE);
+        transferRepository.save(transfer);
+
+        return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
+    }
+
+    @PostMapping("/wallet")
+    public ServirResponse servieWalletConsoleAgent(@RequestBody ServirBody servirBody){
+        Beneficiary beneficiary=beneficiaryRepository.findById(servirBody.getBeneficiaryId()).orElse(null);
+        Customer wallet=customerRepository.findByEmail(beneficiary.getEmail());
+
+        String transferReference=servirBody.getTransferReference();
+        Transfer transfer=transferRepository.findById(transferReference).orElse(null);
+
+        if(beneficiary == null){
+            return new ServirResponse().builder().msg("Message Bloquant, Beneficairy n'existe pas").build();
+        }
+        if(wallet == null){
+            return new ServirResponse().builder().msg("Message Bloquant, Beneficiary n'a pas de wallet").build();
+        }
+        if(transfer == null){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+        }
+        if(transfer.getStatus()== TransferStatus.SERVIE) {
+            return new ServirResponse().builder().msg("Message Bloquant , transfer deja paye").build();
         }
         if(transfer.getStatus() != TransferStatus.A_SERVIR){
-            System.out.println("Message Bloquant , transfer pas dans l'etat a_servir");
-            return ;
+            return new ServirResponse().builder().msg("Message Bloquant , transfer pas dans l'etat a_servir").build();
         }
         //client blacklist dans sirone
 
-//        customer=transfer.getSender();
-//        beneficiary=transfer.getReceiver();
+        String otp=randomPasswordGenerator.generatePassayPassword();
+        transfer.setOtp(otp);
+        transferRepository.save(transfer);
+        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
 
+        return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
+    }
+    @PostMapping("/wallet/verify-otp")
+    public ServirResponse servieWalletConsoleAgentVerifyOtp(@RequestBody ServirOtpRequest servirOtpRequest){
+        Long agentId= servirOtpRequest.getAgentId();
 
+        String transferReference=servirOtpRequest.getTransferRef();
+        Transfer transfer=transferRepository.findById(transferReference).orElse(null);
+        Customer wallet=customerRepository.findByEmail(transfer.getReceiver().getEmail());
 
+        if(transfer == null){
+            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+        }
+        if(servirOtpRequest.getOtp() == null && !transfer.getOtp().equals(servirOtpRequest.getOtp())){
+            return new ServirResponse().builder().msg("Wrong OTP").build();
+        }
+        if(wallet ==null){
+            return new ServirResponse().builder().msg("Message Bloquant , wallet n'existe pas").build();
+        }
+
+        //wipe transfer otp
+        transfer.setOtp(null);
+
+        //Add emission operation
+        Operation operation=Operation.builder()
+                .operationType(OperationType.WALLET_CONSOLE_AGENT)
+                .transferType(TransferType.EMISSION)
+                .agentId(agentId)
+                .timestamp(System.currentTimeMillis())
+                .transferReference(transfer)
+                .build();
+        operationRepository.save(operation);
+
+        //update transfer status
         transfer.setStatus(TransferStatus.SERVIE);
         transferRepository.save(transfer);
-        System.out.println("Confirmer reception d'argent , edition du recu");
+
+        //add solde to beneficiary wallet (customer)
+        wallet.setBalance(wallet.getBalance()+transfer.getAmount());
+        customerRepository.save(wallet);
+
+        return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
     }
-    public void servieEspeceGAB(){
+
+    @GetMapping("/")
+    public ResponseEntity<String> servieEspeceGAB(){
+        System.out.println("someting");
+        return ResponseEntity.ok("wow");
         //transfer dans l'etat 'a servir' ou etat 'deploque a servir' + j meme jour de debloquage
     }
 }
