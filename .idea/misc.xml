@@ -5,6 +5,11 @@
       <list>
         <option value="$PROJECT_DIR$/transfert-Backend/pom.xml" />
         <option value="$PROJECT_DIR$/transfert-Backend/operation-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/account-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/auth-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/config-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/discovery-service/pom.xml" />
+        <option value="$PROJECT_DIR$/transfert-Backend/gateway-service/pom.xml" />
       </list>
     </option>
   </component>

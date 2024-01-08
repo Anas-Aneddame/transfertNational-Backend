@@ -7,17 +7,32 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="auth-service" />
+        <module name="config-service" />
+        <module name="gateway-service" />
         <module name="operation-service" />
+        <module name="account-service" />
         <module name="transfert-Backend" />
+        <module name="discovery-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="account-service" target="17" />
+      <module name="auth-service" target="17" />
+      <module name="config-service" target="17" />
+      <module name="discovery-service" target="17" />
+      <module name="gateway-service" target="17" />
       <module name="operation-service" target="17" />
       <module name="transfert-Backend" target="19" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="account-service" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="discovery-service" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
       <module name="operation-service" options="-parameters" />
     </option>
   </component>
