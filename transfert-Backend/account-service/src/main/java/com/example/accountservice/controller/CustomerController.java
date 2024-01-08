@@ -2,12 +2,14 @@ package com.example.accountservice.controller;
 
 import com.example.accountservice.exception.CustomerNotFoundException;
 import com.example.accountservice.model.Customer;
+import com.example.accountservice.model.Transfer;
 import com.example.accountservice.model.UserRegistrationDTO;
 import com.example.accountservice.repository.CustomerRepository;
 import com.example.accountservice.repository.TransferRepository;
 import com.example.accountservice.service.EmailSenderService;
 import com.example.accountservice.service.PasswordGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("/customers")
 public class CustomerController {
 
     private final RestTemplate restTemplate;
@@ -32,14 +34,16 @@ public class CustomerController {
     public CustomerController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+    @GetMapping("/{customerId}/transfers")
+    public ResponseEntity<List<Transfer>> getTransfersByCustomer(@PathVariable Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
 
+        List<Transfer> transfers = transferRepository.findAllBySender(customer);
+        return new ResponseEntity<>(transfers, HttpStatus.OK);
+    }
 
-    /*@GetMapping("/customers/{customerId}/transfers")
-    public List<Transfer> getAllTransfersForCustomer(@PathVariable Long customerId) {
-        return transferRepository.findAllBySenderId(customerId);
-    }*/
-
-    @PostMapping("/customer")
+    @PostMapping("/")
     Customer newCustomer(@RequestBody Customer newCustomer) {
         // Ajout du Customer
         Customer savedCustomer = customerRepository.save(newCustomer);
@@ -66,13 +70,13 @@ public class CustomerController {
         return customerRepository.findAll();
     }
 
-    @GetMapping("/customer/{CustomerId}")
+    @GetMapping("/{CustomerId}")
     Customer getCustomerById(@PathVariable Long CustomerId) {
         return customerRepository.findById(CustomerId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerId));
     }
 
-    @PutMapping("/customer/{customerId}")
+    @PutMapping("/{customerId}")
     Customer updateCustomer(@RequestBody Customer updatedCustomer, @PathVariable Long customerId) {
         return customerRepository.findById(customerId)
                 .map(existingCustomer -> {
@@ -104,7 +108,7 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping("/customer/{CustomerId}")
+    @DeleteMapping("/{CustomerId}")
     String deleteCustomer(@PathVariable Long CustomerId){
         if(!customerRepository.existsById(CustomerId)){
             throw new CustomerNotFoundException(CustomerId);
