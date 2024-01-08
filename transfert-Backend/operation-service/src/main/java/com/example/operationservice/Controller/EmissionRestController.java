@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@RequestMapping("/OPERATION-SERVICE")
+@RequestMapping("/operation")
 public class EmissionRestController {
     TransferRepository transferRepository;
     CustomerRepository customerRepository;
