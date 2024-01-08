@@ -43,7 +43,7 @@ public class CustomerController {
         return new ResponseEntity<>(transfers, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("/add-customer")
     Customer newCustomer(@RequestBody Customer newCustomer) {
         // Ajout du Customer
         Customer savedCustomer = customerRepository.save(newCustomer);
@@ -65,7 +65,7 @@ public class CustomerController {
 
 
 
-    @GetMapping("/customers")
+    @GetMapping("/all-customers")
     List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }

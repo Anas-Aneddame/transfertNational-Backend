@@ -5,19 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b917bd69-45f8-4bc3-a72d-5cd5906898fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/AgentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/AgentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/model/Transfer.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/model/Transfer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/OperationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/OperationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/TransferRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/TransferRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/test/java/com/example/accountservice/controller/AgentControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/test/java/com/example/accountservice/controller/AgentControllerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +51,7 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "spring.configuration.checksum": "c4525dee400a9a8705a33f5c7e6664d0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -125,7 +116,8 @@
       <updated>1704657855570</updated>
       <workItem from="1704657856652" duration="16000" />
       <workItem from="1704744365012" duration="233000" />
-      <workItem from="1704744616738" duration="1434000" />
+      <workItem from="1704744616738" duration="1475000" />
+      <workItem from="1704746119126" duration="660000" />
     </task>
     <servers />
   </component>
