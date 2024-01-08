@@ -54,7 +54,7 @@ class AgentControllerTest {
     void testGetAgentById() throws Exception {
         Long agentId = 1L;
         Agent agent = new Agent();
-        agent.setId(agentId);
+        agent.setAgentId(agentId);
         when(agentRepository.findById(agentId)).thenReturn(Optional.of(agent));
 
         mockMvc = MockMvcBuilders.standaloneSetup(agentController).build();

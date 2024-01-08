@@ -8,13 +8,15 @@ import com.example.accountservice.repository.CustomerRepository;
 import com.example.accountservice.repository.OperationRepository;
 import com.example.accountservice.repository.TransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -22,12 +24,16 @@ public class CustomerController {
     @Autowired
     private TransferRepository transferRepository;
 
-    /*@GetMapping("/customers/{customerId}/transfers")
-    public List<Transfer> getAllTransfersForCustomer(@PathVariable Long customerId) {
-        return transferRepository.findAllBySenderId(customerId);
-    }*/
+    @GetMapping("/{customerId}/transfers")
+    public ResponseEntity<List<Transfer>> getTransfersByCustomer(@PathVariable Long customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
 
-    @PostMapping("/customer")
+        List<Transfer> transfers = transferRepository.findAllBySender(customer);
+        return new ResponseEntity<>(transfers, HttpStatus.OK);
+    }
+
+    @PostMapping
     Customer newCustomer(@RequestBody Customer newCustomer) {
         return customerRepository.save(newCustomer);
     }
@@ -37,14 +43,14 @@ public class CustomerController {
         return customerRepository.findAll();
     }
 
-    @GetMapping("/customer/{CustomerId}")
+    @GetMapping("/{CustomerId}")
     Customer getCustomerById(@PathVariable Long CustomerId) {
         return customerRepository.findById(CustomerId)
                 .orElseThrow(() -> new CustomerNotFoundException(CustomerId));
     }
 
 
-    @PutMapping("/customer/{customerId}")
+    @PutMapping("/{customerId}")
     Customer updateCustomer(@RequestBody Customer updatedCustomer, @PathVariable Long customerId) {
         return customerRepository.findById(customerId)
                 .map(existingCustomer -> {
@@ -76,7 +82,7 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping("/customer/{CustomerId}")
+    @DeleteMapping("/{CustomerId}")
     String deleteCustomer(@PathVariable Long CustomerId){
         if(!customerRepository.existsById(CustomerId)){
             throw new CustomerNotFoundException(CustomerId);

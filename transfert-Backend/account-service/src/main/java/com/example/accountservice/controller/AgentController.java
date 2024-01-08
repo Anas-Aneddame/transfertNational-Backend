@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@RequestMapping("/agents")
 public class AgentController {
 
     @Autowired
     private AgentRepository agentRepository;
 
 
-    @PostMapping("/agent")
+    @PostMapping
     Agent newAgent(@RequestBody Agent newAgent) {
         return agentRepository.save(newAgent);
     }
 
-    @GetMapping("/agents")
+    @GetMapping("/allAgents")
     List<Agent> getAllAgents() {
         return agentRepository.findAll();
     }
 
-    @GetMapping("/agent/{AgentId}")
+    @GetMapping("/{AgentId}")
     Agent getAgentById(@PathVariable Long AgentId) {
         return agentRepository.findById(AgentId)
                 .orElseThrow(() -> new AgentNotFoundException(AgentId));
     }
 
-    @PutMapping("/agent/{agentId}")
+    @PutMapping("/{agentId}")
     Agent updateAgent(@RequestBody Agent updatedAgent, @PathVariable Long agentId) {
         return agentRepository.findById(agentId)
                 .map(existingAgent -> {
@@ -63,7 +63,7 @@ public class AgentController {
     }
 
 
-    @DeleteMapping("/agent/{AgentId}")
+    @DeleteMapping("/{AgentId}")
     String deleteAgent(@PathVariable Long AgentId){
         if(!agentRepository.existsById(AgentId)){
             throw new AgentNotFoundException(AgentId);

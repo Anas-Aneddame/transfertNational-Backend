@@ -15,11 +15,15 @@ import java.util.List;
 @Builder
 public class Transfer {
     @Id
+    @GeneratedValue
     private String transferReference;
-    @Transient
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
     private Customer sender;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
     private Beneficiary receiver;
 
     @Enumerated(EnumType.STRING)
