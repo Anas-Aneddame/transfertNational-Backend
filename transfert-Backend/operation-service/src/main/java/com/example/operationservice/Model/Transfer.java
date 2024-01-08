@@ -13,11 +13,13 @@ import java.util.List;
 public class Transfer {
     @Id
     private String transferReference;
-    @Transient
+
+    @ManyToOne
     private Customer sender;
 
-    @Transient
+    @ManyToOne
     private Beneficiary receiver;
+
     @Enumerated(EnumType.STRING)
     private TransferStatus status;
 
@@ -25,6 +27,11 @@ public class Transfer {
 
     private long timestamp;
 
+    private boolean confirmed;
+
+    private String otp;
+
+    private String motif;
     @OneToMany
     private List<Operation> operationList;
 
