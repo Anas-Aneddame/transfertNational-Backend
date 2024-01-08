@@ -5,6 +5,8 @@ import com.example.accountservice.model.Customer;
 import com.example.accountservice.model.UserRegistrationDTO;
 import com.example.accountservice.repository.CustomerRepository;
 import com.example.accountservice.repository.TransferRepository;
+import com.example.accountservice.service.EmailSenderService;
+import com.example.accountservice.service.PasswordGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,11 @@ import java.util.List;
 public class CustomerController {
 
     private final RestTemplate restTemplate;
+    @Autowired
+    PasswordGeneratorService passwordGeneratorService;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -34,16 +41,19 @@ public class CustomerController {
 
     @PostMapping("/customer")
     Customer newCustomer(@RequestBody Customer newCustomer) {
+        // Ajout du Customer
         Customer savedCustomer = customerRepository.save(newCustomer);
 
+        //objet DTO pour l'enregistrement de l'utilisateur
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
         userRegistrationDTO.setFirstName(newCustomer.getFirstName());
-        userRegistrationDTO.setFirstName(newCustomer.getLastName());
-
+        userRegistrationDTO.setLastName(newCustomer.getLastName());
         userRegistrationDTO.setCustomerId(newCustomer.getCustomerId());
+        userRegistrationDTO.setPassword(passwordGeneratorService.generatePassword());
+
         String authRegisterUrl = "http://localhost:8888/AUTH-SERVICE/auth/register";
         ResponseEntity<Void> authResponse = restTemplate.postForEntity(authRegisterUrl, userRegistrationDTO, Void.class);
-
+        emailSenderService.sendSimpleEmail(newCustomer.getEmail(),"Nouveau mot de passe pour votre compte de l'application de transfert","Nous vous informons que votre mot de passe pour l'application de transfert a été réinitialisé avec succès. Vous trouverez ci-dessous vos nouvelles informations d'identification :\n password :  "+userRegistrationDTO.getPassword());
 
         return savedCustomer;
     }

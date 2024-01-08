@@ -16,7 +16,6 @@ public class UserRegistrationDTO {
 
     public UserRegistrationDTO() {
         this.role = "customer";
-        this.password ="password";
     }
 
 
