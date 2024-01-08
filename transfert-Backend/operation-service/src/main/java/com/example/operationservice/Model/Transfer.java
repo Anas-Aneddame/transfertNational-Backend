@@ -31,6 +31,8 @@ public class Transfer {
 
     private String otp;
 
+    private String codepin;
+
     private String motif;
     @OneToMany
     private List<Operation> operationList;
