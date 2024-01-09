@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.time.LocalDate;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/servir")
-@CrossOrigin(origins = "http://localhost:4200/")
 public class ServirRestController {
     private TransferRepository transferRepository;
     private CustomerRepository customerRepository;
@@ -110,7 +110,7 @@ public class ServirRestController {
         //Add emission operation
         Operation operation=Operation.builder()
                 .operationType(OperationType.ESPECE_CONSOLE_AGENT)
-                .transferType(TransferType.EMISSION)
+                .transferType(TransferType.SERVIE)
                 .agentId(agentId)
                 .timestamp(System.currentTimeMillis())
                 .transferReference(transfer)
@@ -153,7 +153,7 @@ public class ServirRestController {
 //        //Add emission operation
 //        Operation operation=Operation.builder()
 //                .operationType(OperationType.ESPECE_CONSOLE_AGENT)
-//                .transferType(TransferType.EMISSION)
+//                .transferType(TransferType.SERVIE)
 //                .agentId(agentId)
 //                .timestamp(System.currentTimeMillis())
 //                .transferReference(transfer)
@@ -230,7 +230,7 @@ public class ServirRestController {
         //Add emission operation
         Operation operation=Operation.builder()
                 .operationType(OperationType.WALLET_CONSOLE_AGENT)
-                .transferType(TransferType.EMISSION)
+                .transferType(TransferType.SERVIE)
                 .agentId(agentId)
                 .timestamp(System.currentTimeMillis())
                 .transferReference(transfer)
@@ -278,7 +278,7 @@ public class ServirRestController {
         //Add emission operation
         Operation operation=Operation.builder()
                 .operationType(OperationType.ESPECE_GAB)
-                .transferType(TransferType.EMISSION)
+                .transferType(TransferType.SERVIE)
                 .agentId(agentId)
                 .timestamp(System.currentTimeMillis())
                 .transferReference(transfer)

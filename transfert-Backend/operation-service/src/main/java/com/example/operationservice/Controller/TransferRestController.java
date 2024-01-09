@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transfers")
-@CrossOrigin("http://localhost:4200/")
+@CrossOrigin("*")
 public class TransferRestController {
     private TransferRepository transferRepository;
     private CustomerRepository customerRepository;
@@ -39,9 +39,21 @@ public class TransferRestController {
                         .plafondAnnuel(20000D)
                         .build();
         customerRepository.save(customer);
+        Customer customer2=
+                Customer.builder()
+                        .Email("hamdanimee@gmail.com")
+                        .FirstName("Brahim")
+                        .LastName("Sadik")
+                        .Balance(12000D)
+                        .plafondAnnuel(20000D)
+                        .build();
+        customerRepository.save(customer2);
 
         Beneficiary beneficiary=Beneficiary.builder().firstName("Jane").lastName("Justen").email("Jane@austen.com").phone("0607098091").build();
         beneficiaryRepository.save(beneficiary);
+
+        Beneficiary beneficiary2=Beneficiary.builder().firstName("Jack").lastName("Hollow").email("justinHollow@ensa.com").phone("0611098091").build();
+        beneficiaryRepository.save(beneficiary2);
 
         transferRepository.saveAll(List.of(
                 Transfer.builder()
@@ -50,6 +62,15 @@ public class TransferRestController {
                         .confirmed(true)
                         .sender(customer)
                         .receiver(beneficiary)
+                        .status(TransferStatus.A_SERVIR)
+                        .timestamp(System.currentTimeMillis())
+                        .build(),
+                Transfer.builder()
+                        .transferReference("002")
+                        .amount(1000)
+                        .confirmed(true)
+                        .sender(customer2)
+                        .receiver(beneficiary2)
                         .status(TransferStatus.A_SERVIR)
                         .timestamp(System.currentTimeMillis())
                         .build()
