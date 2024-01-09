@@ -15,7 +15,8 @@ import com.example.operationservice.Service.RandomPasswordGenerator;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/OPERATION-SERVICE")
+//@CrossOrigin(origins = "*")
+@RequestMapping("/operation")
 public class RestitutionRestController {
 
     TransferRepository transferRepository;

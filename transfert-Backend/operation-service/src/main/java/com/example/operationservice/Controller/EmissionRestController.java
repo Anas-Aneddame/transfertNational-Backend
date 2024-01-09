@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
-@CrossOrigin("http://localhost:4200/")
+//@CrossOrigin(origins = "*")
 @RequestMapping("/operation")
 public class EmissionRestController {
     TransferRepository transferRepository;

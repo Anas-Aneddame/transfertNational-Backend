@@ -12,24 +12,35 @@ public class Customer {
     private String FirstName;
     private String LastName;
     private String CNE;
-    private String Email;
+    private String email;
     private String Phone;
     private Double Balance;
     private String AccountType;
 
+    private Double plafondAnnuel;
 
-    public Customer(Long customerId, String firstName, String lastName, String CNE, String email, String phone, Double balance, String accountType) {
+
+    public Customer(Long customerId, String firstName, String lastName, String CNE, String email, String phone, Double balance, String accountType,Double plafondAnnuel) {
         CustomerId = customerId;
         FirstName = firstName;
         LastName = lastName;
         this.CNE = CNE;
-        Email = email;
+        this.email = email;
         Phone = phone;
         this.Balance = balance;
         AccountType = accountType;
+        this.plafondAnnuel = plafondAnnuel;
     }
 
     public Customer() {
+    }
+
+    public Double getPlafondAnnuel() {
+        return plafondAnnuel;
+    }
+
+    public void setPlafondAnnuel(Double plafondAnnuel) {
+        this.plafondAnnuel = plafondAnnuel;
     }
 
     public Long getCustomerId() {
@@ -65,11 +76,11 @@ public class Customer {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPhone() {

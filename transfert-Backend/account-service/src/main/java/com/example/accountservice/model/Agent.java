@@ -13,19 +13,19 @@ public class Agent {
     private String FirstName;
     private String LastName;
     private String CNE;
-    private String Email;
+    private String email;
     private String Phone;
     private String Role;
 
 
     public Agent(Long agentId, String firstName, String lastName, String CNE, String email, String phone, String role) {
-        AgentId = agentId;
-        FirstName = firstName;
-        LastName = lastName;
+        this.AgentId = agentId;
+        this.FirstName = firstName;
+        this.LastName = lastName;
         this.CNE = CNE;
-        Email = email;
-        Phone = phone;
-        Role = role;
+        this.email = email;
+        this.Phone = phone;
+        this.Role = role;
     }
 
 
@@ -65,11 +65,11 @@ public class Agent {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPhone() {

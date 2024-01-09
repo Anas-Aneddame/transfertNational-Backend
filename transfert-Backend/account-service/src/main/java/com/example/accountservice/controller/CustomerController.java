@@ -1,6 +1,7 @@
 package com.example.accountservice.controller;
 
 import com.example.accountservice.exception.CustomerNotFoundException;
+import com.example.accountservice.model.Agent;
 import com.example.accountservice.model.Customer;
 import com.example.accountservice.model.Transfer;
 import com.example.accountservice.model.UserRegistrationDTO;
@@ -17,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
+//@CrossOrigin(origins = "*")
 @RequestMapping("/customers")
 public class CustomerController {
 
@@ -63,6 +64,11 @@ public class CustomerController {
         return savedCustomer;
     }
 
+
+    @GetMapping("/email/{email}")
+    public Customer getAgentByEmail(@PathVariable String email) {
+        return  customerRepository.findByEmail(email);
+    }
 
 
 
