@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:4200/")
 @RequestMapping("/beneficiaries")
 public class BeneficiaryController {
 
@@ -28,7 +29,10 @@ public class BeneficiaryController {
         return beneficiaryRepository.findById(id)
                 .orElseThrow(() -> new BeneficiaryNotFoundException(id));
     }
-
+    @GetMapping("/beneficiaries-customer/{customerId}")
+    public List<Beneficiary> getBeneficiariesByCustomerId(@PathVariable Long customerId) {
+        return beneficiaryRepository.findByCustomer_Id(customerId);
+    }
     @PostMapping
     public Beneficiary createBeneficiary(@RequestBody Beneficiary newBeneficiary) {
         return beneficiaryRepository.save(newBeneficiary);

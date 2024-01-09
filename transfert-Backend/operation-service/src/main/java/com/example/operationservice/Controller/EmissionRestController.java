@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @RestController
+@CrossOrigin("http://localhost:4200/")
 @RequestMapping("/operation")
 public class EmissionRestController {
     TransferRepository transferRepository;
@@ -139,17 +140,22 @@ public class EmissionRestController {
     @GetMapping("/create")
     public void create()
     {
-        Customer c = Customer.builder()
-                .FirstName("Jonathan")
-                .LastName("Joestar")
-                .Email("nizar.bouhsaine@gmail.com")
-                .Balance(20000.0)
-                .Phone("0607080910")
-                .plafondAnnuel(20000.0).build();
-        customerRepository.save(c);
+//        Customer c = Customer.builder()
+//                .FirstName("Jonathan")
+//                .LastName("Joestar")
+//                .Email("nizar.bouhsaine@gmail.com")
+//                .Balance(20000.0)
+//                .Phone("0607080910")
+//                .plafondAnnuel(20000.0).build();
+//        customerRepository.save(c);
 
-        Beneficiary b = Beneficiary.builder().firstName("Jane").lastName("Austen").email("Jane@austen.com").phone("0607098091").build();
+        Customer cc = customerRepository.getById(1L);
+        Beneficiary b = Beneficiary.builder().firstName("Jack").lastName("Sparrow").email("Jack@sparrow.com").phone("0607080910").customer(cc).build();
+        Beneficiary b2 = Beneficiary.builder().firstName("Agatha").lastName("Christie").email("Agatha@Christie.com").phone("067481245").customer(cc).build();
+
         beneficiaryRepository.save(b);
+        beneficiaryRepository.save(b2);
+
 
     }
 

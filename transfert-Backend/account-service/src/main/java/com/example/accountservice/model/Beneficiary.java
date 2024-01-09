@@ -1,9 +1,6 @@
 package com.example.accountservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -20,4 +17,6 @@ public class Beneficiary {
     private String lastName;
     private String phone;
     private String email;
+    @ManyToOne
+    Customer customer;
 }
