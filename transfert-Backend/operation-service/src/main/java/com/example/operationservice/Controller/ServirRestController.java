@@ -198,7 +198,8 @@ public class ServirRestController {
         String otp=randomPasswordGenerator.generatePassayPassword();
         transfer.setOtp(otp);
         transferRepository.save(transfer);
-        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
+//        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
+        emailSenderService.sendSimpleEmail("hamdanimee@gmail.com","OTP","Code : "+otp);
 
         return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
     }
