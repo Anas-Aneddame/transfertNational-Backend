@@ -23,6 +23,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/servir")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class ServirRestController {
     private TransferRepository transferRepository;
     private CustomerRepository customerRepository;
@@ -83,6 +84,7 @@ public class ServirRestController {
 
     @PostMapping("/espece-console")
     public ServirResponse servieEspeceConsoleAgent(@RequestBody ServirBody servirBody){
+        Long agentId=servirBody.getAgentId();
         Beneficiary beneficiary=beneficiaryRepository.findById(servirBody.getBeneficiaryId()).orElse(null);
 
         String transferReference=servirBody.getTransferReference();
@@ -105,33 +107,6 @@ public class ServirRestController {
         }
         //client blacklist dans sirone
 
-        String otp=randomPasswordGenerator.generatePassayPassword();
-        transfer.setOtp(otp);
-        transferRepository.save(transfer);
-        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
-
-        return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
-    }
-    @PostMapping("/espece-console/verify-otp")
-    public ServirResponse servirEspeceConsoleAgentVerifyOtp(@RequestBody ServirOtpRequest servirOtpRequest){
-        Long agentId= servirOtpRequest.getAgentId();
-
-        String transferReference=servirOtpRequest.getTransferRef();
-        Transfer transfer=transferRepository.findById(transferReference).orElse(null);
-
-        if(transfer == null){
-            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
-        }
-        if(!transfer.isConfirmed()){
-            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
-        }
-        if(!transfer.getOtp().equals(servirOtpRequest.getOtp())){
-            return new ServirResponse().builder().msg("Wrong OTP").build();
-        }
-
-        //wipe transfer otp
-        transfer.setOtp(null);
-
         //Add emission operation
         Operation operation=Operation.builder()
                 .operationType(OperationType.ESPECE_CONSOLE_AGENT)
@@ -146,8 +121,51 @@ public class ServirRestController {
         transfer.setStatus(TransferStatus.SERVIE);
         transferRepository.save(transfer);
 
+//        String otp=randomPasswordGenerator.generatePassayPassword();
+//        transfer.setOtp(otp);
+//        transferRepository.save(transfer);
+//        emailSenderService.sendSimpleEmail(beneficiary.getEmail(),"OTP","Code : "+otp);
+//
+//        return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
+
         return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
     }
+//    @PostMapping("/espece-console/verify-otp")
+//    public ServirResponse servirEspeceConsoleAgentVerifyOtp(@RequestBody ServirOtpRequest servirOtpRequest){
+//        Long agentId= servirOtpRequest.getAgentId();
+//
+//        String transferReference=servirOtpRequest.getTransferRef();
+//        Transfer transfer=transferRepository.findById(transferReference).orElse(null);
+//
+//        if(transfer == null){
+//            return new ServirResponse().builder().msg("Message Bloquant , transfer n'existe pas").build();
+//        }
+//        if(!transfer.isConfirmed()){
+//            return new ServirResponse().builder().msg("Message Bloquant , transfer n'est pas confirmé").build();
+//        }
+//        if(!transfer.getOtp().equals(servirOtpRequest.getOtp())){
+//            return new ServirResponse().builder().msg("Wrong OTP").build();
+//        }
+//
+//        //wipe transfer otp
+//        transfer.setOtp(null);
+//
+//        //Add emission operation
+//        Operation operation=Operation.builder()
+//                .operationType(OperationType.ESPECE_CONSOLE_AGENT)
+//                .transferType(TransferType.EMISSION)
+//                .agentId(agentId)
+//                .timestamp(System.currentTimeMillis())
+//                .transferReference(transfer)
+//                .build();
+//        operationRepository.save(operation);
+//
+//        //update transfer status
+//        transfer.setStatus(TransferStatus.SERVIE);
+//        transferRepository.save(transfer);
+//
+//        return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
+//    }
 
     @PostMapping("/wallet")
     public ServirResponse servieWalletConsoleAgent(@RequestBody ServirBody servirBody){
