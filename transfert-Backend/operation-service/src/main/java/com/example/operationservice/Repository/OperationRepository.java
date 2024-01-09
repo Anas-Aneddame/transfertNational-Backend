@@ -12,4 +12,5 @@ import java.util.List;
 public interface OperationRepository extends JpaRepository<Operation,Long> {
     @Query("SELECT o FROM Operation o WHERE o.transferReference.transferReference=:transferReference and o.transferType=:transferType")
     public List<Operation> findAllByTransferReferenceAndTransferType(String transferReference, TransferType transferType);
+
 }

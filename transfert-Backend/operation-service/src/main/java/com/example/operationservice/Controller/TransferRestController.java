@@ -8,6 +8,7 @@ import com.example.operationservice.Model.Transfer;
 import com.example.operationservice.Reponse.TransferBackofficeResponse;
 import com.example.operationservice.Repository.BeneficiaryRepository;
 import com.example.operationservice.Repository.CustomerRepository;
+import com.example.operationservice.Repository.OperationRepository;
 import com.example.operationservice.Repository.TransferRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,9 @@ public class TransferRestController {
         Beneficiary beneficiary2=Beneficiary.builder().firstName("Jack").lastName("Hollow").email("justinHollow@ensa.com").phone("0611098091").build();
         beneficiaryRepository.save(beneficiary2);
 
+        Beneficiary beneficiary3=Beneficiary.builder().firstName("Mohamed").lastName("Hamdani").email("hamdanimee@gmail.com").phone("0611098091").build();
+        beneficiaryRepository.save(beneficiary3);
+
         transferRepository.saveAll(List.of(
                 Transfer.builder()
                         .transferReference("001")
@@ -62,7 +66,7 @@ public class TransferRestController {
                         .confirmed(true)
                         .sender(customer)
                         .receiver(beneficiary)
-                        .status(TransferStatus.A_SERVIR)
+                        .status(TransferStatus.SERVIE)
                         .timestamp(System.currentTimeMillis())
                         .build(),
                 Transfer.builder()
@@ -72,6 +76,15 @@ public class TransferRestController {
                         .sender(customer2)
                         .receiver(beneficiary2)
                         .status(TransferStatus.A_SERVIR)
+                        .timestamp(System.currentTimeMillis())
+                        .build(),
+                Transfer.builder()
+                        .transferReference("003")
+                        .amount(5000)
+                        .confirmed(true)
+                        .sender(customer2)
+                        .receiver(beneficiary3)
+                        .status(TransferStatus.SERVIE)
                         .timestamp(System.currentTimeMillis())
                         .build()
         ));
@@ -98,6 +111,58 @@ public class TransferRestController {
         });
 
         return transferDTOS;
+    }
+    @GetMapping("/tranfersByEmail/{customerEmail}")
+    public List<TransferBackofficeResponse> getTransferByCustomerEmail(@PathVariable String customerEmail){
+        List<Transfer> transferList=transferRepository.findTransferByEmail(customerEmail);
+        List<TransferBackofficeResponse> transferBackofficeResponseList=new ArrayList<>();
+        transferList.forEach(transfer -> {
+            TransferDTO transferDTO=TransferDTO.builder()
+                    .status(transfer.getStatus())
+                    .motif(transfer.getMotif())
+                    .transferReference(transfer.getTransferReference())
+                    .receiver(transfer.getReceiver().getId())
+                    .sender(transfer.getSender().getCustomerId())
+                    .timestamp(transfer.getTimestamp())
+                    .confirmed(transfer.isConfirmed())
+                    .amount(transfer.getAmount())
+                    .otp(transfer.getOtp())
+                    .codepin(transfer.getCodepin())
+                    .build();
+            transferBackofficeResponseList.add(
+                    TransferBackofficeResponse.builder()
+                            .transferDTO(transferDTO)
+                            .beneficiary(transfer.getReceiver())
+                            .customer(transfer.getSender())
+                            .build());
+        });
+        return transferBackofficeResponseList;
+    }
+    @GetMapping("/customer-transfers/{customerid}")
+    public List<TransferBackofficeResponse> getTransfersBySenderId(@PathVariable Long customerid){
+        List<Transfer> transferList=transferRepository.findTransferBySenderId(customerid);
+        List<TransferBackofficeResponse> transferBackofficeResponseList=new ArrayList<>();
+        transferList.forEach(transfer -> {
+            TransferDTO transferDTO=TransferDTO.builder()
+                    .status(transfer.getStatus())
+                    .motif(transfer.getMotif())
+                    .transferReference(transfer.getTransferReference())
+                    .receiver(transfer.getReceiver().getId())
+                    .sender(transfer.getSender().getCustomerId())
+                    .timestamp(transfer.getTimestamp())
+                    .confirmed(transfer.isConfirmed())
+                    .amount(transfer.getAmount())
+                    .otp(transfer.getOtp())
+                    .codepin(transfer.getCodepin())
+                    .build();
+            transferBackofficeResponseList.add(
+                    TransferBackofficeResponse.builder()
+                    .transferDTO(transferDTO)
+                    .beneficiary(transfer.getReceiver())
+                    .customer(transfer.getSender())
+                    .build());
+        });
+        return transferBackofficeResponseList;
     }
     @GetMapping("/{reference}")
     public TransferBackofficeResponse getTransferByRef(@PathVariable String reference){
