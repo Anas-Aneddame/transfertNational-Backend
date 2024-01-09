@@ -5,14 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b917bd69-45f8-4bc3-a72d-5cd5906898fa" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/service/AgentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/AgentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/controller/AgentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/model/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/model/Agent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/AgentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/java/com/example/accountservice/repository/AgentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/account-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transfert-Backend/auth-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/transfert-Backend/auth-service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -46,7 +57,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "transfert-branch",
-    "last_opened_file_path": "C:/Users/hp/Desktop/transfertNational-Backend/transfert-Backend/gateway-service",
+    "last_opened_file_path": "C:/TransferProject/Backend2/transfertNational-Backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -118,6 +129,7 @@
       <workItem from="1704744365012" duration="233000" />
       <workItem from="1704744616738" duration="1475000" />
       <workItem from="1704746119126" duration="660000" />
+      <workItem from="1704758603579" duration="815000" />
     </task>
     <servers />
   </component>
