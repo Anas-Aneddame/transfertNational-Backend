@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/account-service/account-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/account-service/account-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/auth-service/auth-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/auth-service/auth-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/config-service/config-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/config-service/config-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/discovery-service/discovery-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/discovery-service/discovery-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/gateway-service/gateway-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/gateway-service/gateway-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/operation-service/operation-service.iml" filepath="$PROJECT_DIR$/transfert-Backend/operation-service/operation-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/transfert-Backend/transfert-Backend.iml" filepath="$PROJECT_DIR$/transfert-Backend/transfert-Backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/transfertNational-Backend.iml" filepath="$PROJECT_DIR$/.idea/transfertNational-Backend.iml" />
     </modules>
   </component>

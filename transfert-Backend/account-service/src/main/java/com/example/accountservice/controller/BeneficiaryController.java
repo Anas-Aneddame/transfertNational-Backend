@@ -13,12 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/beneficiaries")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BeneficiaryController {
 
     @Autowired
     private BeneficiaryRepository beneficiaryRepository;
 
-    @GetMapping
+    @GetMapping("/all-beneficiaries")
     public List<Beneficiary> getAllBeneficiaries() {
         return beneficiaryRepository.findAll();
     }
@@ -27,6 +28,16 @@ public class BeneficiaryController {
     public Beneficiary getBeneficiaryById(@PathVariable Long id) {
         return beneficiaryRepository.findById(id)
                 .orElseThrow(() -> new BeneficiaryNotFoundException(id));
+    }
+    //@GetMapping("/customer/{customerId}")
+    //public ResponseEntity<List<Beneficiary>> getBeneficiariesByCustomerId(@PathVariable Long customerId) {
+        //List<Beneficiary> beneficiaries = beneficiaryRepository.findByCustomerId(customerId);
+        //return new ResponseEntity<>(beneficiaries, HttpStatus.OK);
+    //}
+
+    @GetMapping("/beneficiaries-customer/{customerId}")
+    public List<Beneficiary> getBeneficiariesByCustomerId(@PathVariable Long customerId) {
+        return beneficiaryRepository.findByCustomer_Id(customerId);
     }
 
     @PostMapping
@@ -50,6 +61,10 @@ public class BeneficiaryController {
                     }
                     if (updatedBeneficiary.getPhone()!= null) {
                         existingBeneficiary.setPhone(updatedBeneficiary.getPhone());
+                    }
+                    // Update the foreign key (customer_id)
+                    if (updatedBeneficiary.getCustomer() != null) {
+                        existingBeneficiary.setCustomer(updatedBeneficiary.getCustomer());
                     }
 
 

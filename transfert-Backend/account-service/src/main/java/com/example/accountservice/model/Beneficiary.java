@@ -1,9 +1,6 @@
 package com.example.accountservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -16,6 +13,10 @@ public class Beneficiary {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     private String firstName;
     private String lastName;
     private String phone;
