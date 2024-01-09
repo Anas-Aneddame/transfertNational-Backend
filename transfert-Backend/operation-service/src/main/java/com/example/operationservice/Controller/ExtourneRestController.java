@@ -11,10 +11,7 @@ import com.example.operationservice.Repository.TransferRepository;
 import com.example.operationservice.Request.ExtourneRequest;
 import com.example.operationservice.Request.ServirBody;
 import org.springframework.cglib.core.Local;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -23,6 +20,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*")
 @RestController
 
 @RequestMapping("/")
