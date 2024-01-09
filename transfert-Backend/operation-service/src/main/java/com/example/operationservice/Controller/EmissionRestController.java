@@ -127,8 +127,11 @@ public class EmissionRestController {
                 .AccountType(customer.get().getAccountType())
                 .Email(customer.get().getEmail())
                 .build();
-        senderService.sendSimpleEmail(customer.get().getEmail(),"OTP verification",otp);
 
+
+        System.out.println("Before email...");
+        senderService.sendSimpleEmail(customer.get().getEmail(),"OTP verification",otp);
+        System.out.println("After email...");
         customerRepository.save(newCustomer);
         transferRepository.save(transfer);
         operationRepository.save(operation);

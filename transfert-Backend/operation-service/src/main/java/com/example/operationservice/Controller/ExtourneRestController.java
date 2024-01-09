@@ -55,7 +55,7 @@ public class ExtourneRestController {
         if(operationList.size()==0){
             return new ServirResponse().builder().msg("le transfer n'est pas emi").build();
         }
-        if(operationList.get(0).getAgentId() != extourneBody.getAgentId()){
+        if(99 != extourneBody.getAgentId()){
             return new ServirResponse().builder().msg("le transfer n'est pas ete emitter par le meme agent").build();
         }
 

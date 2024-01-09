@@ -11,6 +11,7 @@ public class EmailSenderService {
         this.mailSender=mailSender;
     }
     public void sendSimpleEmail(String toEmail,String subject,String body){
+        System.out.println("Mail started...");
         SimpleMailMessage message=new SimpleMailMessage();
         message.setFrom("projetai_2024@gmail.com");
         message.setTo(toEmail);

@@ -128,7 +128,7 @@ public class ServirRestController {
 //
 //        return new ServirResponse().builder().msg("Demandez OTP de beneficiare").build();
 
-        return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
+        return new ServirResponse().builder().msg("Confirmer reception d'argent ").build();
     }
 //    @PostMapping("/espece-console/verify-otp")
 //    public ServirResponse servirEspeceConsoleAgentVerifyOtp(@RequestBody ServirOtpRequest servirOtpRequest){
@@ -246,7 +246,7 @@ public class ServirRestController {
         wallet.setBalance(wallet.getBalance()+transfer.getAmount());
         customerRepository.save(wallet);
 
-        return new ServirResponse().builder().msg("Confirmer reception d'argent , edition du recu").build();
+        return new ServirResponse().builder().msg("Confirmer reception d'argent ").build();
     }
 
     @PostMapping("/GAB")
@@ -290,6 +290,6 @@ public class ServirRestController {
         transfer.setStatus(TransferStatus.SERVIE);
         transferRepository.save(transfer);
 
-        return new ServirResponse().builder().msg("Confirmer reception d'argent , Edition du recu").build();
+        return new ServirResponse().builder().msg("Confirmer reception d'argent ").build();
     }
 }
